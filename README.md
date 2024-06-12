@@ -5,20 +5,20 @@
 
 ## Welcome to the VELOCITI, this repository is to provide code for Evaluation of models on VELOCITI, and provide a jupyter notebook to visualize all the data presented in the benchmark.
 
-### ⭐️ For instant visualization of data samples, please visit our project page: [velociti-benchmark.github.io](velociti-benchmark.github.io)
+## ⭐️ For instant visualization of data samples, please visit our project page: [velociti-benchmark.github.io](velociti-benchmark.github.io)
 
 
-# Set-Up for Visualizing Data
+# Set-Up for Visualizing Data 📊
 
 ### Setting-up the Conda Environment
 ```
-conda env create --name veloexplore --file environments/visualizer_env.yaml
-conda activate veloexplore
+conda env create --name velo --file environments/visualizer_env.yaml
+conda activate velo
 ```
 
-### Setting-up Data
+### Setting-up Data 💿
 
-- The data is available [Here](https://drive.google.com/file/d/1kwXbOknTZA-BeUbpXH5tSS77kiBTipkt/view?usp=drive_link) as a `.zip` file.
+- The data is available [Here](https://drive.google.com/file/d/1aKxJL-xv6rS9ChqeLtokKIXBGaRMdD9w/view?usp=sharing) as a `.zip` file.
 - Either manually visit the link and donwload the `velociti_data.zip` in the root of this directory, or
 - Download the `velociti_data.zip` via `gdown`
 
@@ -30,7 +30,7 @@ Then in a python terminal or a file,
 
 ```
 import gdown
-gdown.download('https://drive.google.com/uc?id=1kwXbOknTZA-BeUbpXH5tSS77kiBTipkt', 'velociti_data.zip')
+gdown.download('https://drive.google.com/uc?id=1aKxJL-xv6rS9ChqeLtokKIXBGaRMdD9w', 'velociti_data.zip')
 ```
 
 Unzip the data, and you should see the directory structure as below.
@@ -48,18 +48,70 @@ Unzip the data, and you should see the directory structure as below.
 │   ├── agent_iden.json
 │   ├── control.json
 │   ├── coref.json
+│   ├── frames  [900 entries]
 │   ├── pos_caps.json
 │   ├── sequence.json
 │   └── vidsitu_dict.json
-├── data_explore.ipynb
-├── velociti_data.zip
 └── videos
-    ├── velociti_videos_10s
-    └── velociti_videos_4s
+    ├── velociti_videos_10s  [900 entries]
+    └── velociti_videos_4s  [900 entries]
 ```
 
 
 Ready for browsing the [provided Jupyter Notebook](data_explore.ipynb) !
+
+
+# CLIP Model Evaluations
+
+### Environment Setup 🌏
+
+Activate the same environment set-up above,
+
+```
+conda activate velo
+pip install -r environments/requirements.txt
+```
+
+### NOTE 🔔
+ 
+CLIP-ViP model has to be manually downloaded and placed within the folder `.hf_cache` in the root directory of this repository.
+Note: All the models, except `CLIP-ViP`, will be automatically downloaded by the script, inside the directory `.hf_cache` in the root folder. The model can be found [here](https://github.com/microsoft/XPretrain/tree/main/CLIP-ViP).
+
+If, you wish a different path for the cache files, modify the  `main_eval.py` file accordingly.
+
+After ensuring the above directory structure, and simply run
+
+```
+python main_eval.py --num_workers 4 \
+                    --all \
+                    --output output \ 
+                    --exhaustive_log \
+                    --seed 1000
+
+```
+
+This will download and run the evaluation on all the models.
+If a specific model is to be checked (say `clip_B_32`), then run,
+
+```
+python main_eval.py --num_workers 4 \
+                    --model clip_B_32 \
+                    --output output \ 
+                    --exhaustive_log \
+                    --seed 1000
+
+```
+
+The `exhasutive_log` saves the output for every sample in the benchmark, and if that level of logging is not required, simply run the evaluation without it, by 
+
+
+```
+python main_eval.py --num_workers 4 \
+                    --all \
+                    --output output \ 
+                    --seed 1000
+
+```
 
 
 <hr>
